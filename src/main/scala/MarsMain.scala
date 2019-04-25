@@ -71,7 +71,7 @@ object MarsMain extends App {
 
 //  println("Hello! Starting rover input")
 //  println("Commands are as follows:")
-  private val commands: Seq[String] = fromResource("test-input.txt").getLines().toSeq
+  private val commands: Seq[String] = fromResource("input.txt").getLines().toSeq
 //  commands.foreach(println)
 
 //  println("Running rover commands...")
