@@ -7,7 +7,14 @@ import scala.annotation.tailrec
 
 object RoverService {
 
-  def processInstructions(inputData: InputData) = {
+  /**
+    * Processes the instructions from the input data. We keep two lists - rovers that have finished moving, and rovers
+    * that have yet to move. We could do this with one list, but this makes the code easier to read + understand. We
+    * should always be striving to make it easy to read/maintain/update code.
+    * @param inputData The case class containing the instructions
+    * @return A Seq of rovers that have finished moving.
+    */
+  def processInstructions(inputData: InputData): Seq[Rover] = {
     val rovers = inputData.instructions.map { x =>
       Rover(
         x.roverId,
@@ -34,7 +41,16 @@ object RoverService {
     }
   }
 
-  def sendRoverCommands(instructions: Instructions, maxX: Integer, maxY: Integer, existingRovers: Seq[Rover] = Seq.empty[Rover], unmovedRovers: Seq[Rover] = Seq.empty[Rover]) = {
+  /**
+    * Sends instructions to a rover, passing along the grid size, and the lists of rovers that have/haven't finished moving
+    * @param instructions Instructions for a rover
+    * @param maxX Grid maximum x axis value
+    * @param maxY Grid mximum y axis value
+    * @param existingRovers The existing rovers that have already moved
+    * @param unmovedRovers Rovers that haven't moved yet
+    * @return A rover that has finished moving
+    */
+  def sendRoverCommands(instructions: Instructions, maxX: Integer, maxY: Integer, existingRovers: Seq[Rover] = Seq.empty[Rover], unmovedRovers: Seq[Rover] = Seq.empty[Rover]): Rover = {
     val rover = Rover(
       instructions.roverId,
       instructions.startPosition.startPosX,
