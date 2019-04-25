@@ -30,4 +30,4 @@ Aside from that, the program follows the following logic:
 Check out the tests for more examples of this
 
 ## Running
-Go to the base directory and type `sbt run`
+Go to the root directory and type `sbt run`
