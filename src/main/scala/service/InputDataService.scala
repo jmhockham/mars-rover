@@ -26,15 +26,20 @@ object InputDataService {
     }
   }
 
+  private val gridSizeRegex = "([1-9]+)\\s([1-9]+)"
+  private val startingPosRegex = "([1-9]+)\\s([1-9]+)"
+  private val startDataRegex = "([1-9]+)\\s([1-9]+)\\s([A-Z]+)"
+
   /**
     * Checks the commands are valid, according to the format that is expected in the input file
+    *
     * @param commands Seq of strings, from the input file
     * @return A true/false flag, denoting if the format is correct.
     */
   def checkCommands(commands: Seq[String]): Boolean = {
     val gridSizeStr = commands.head
 
-    if (!checkStringFormat("([1-9]+)\\s([1-9]+)", gridSizeStr)) {
+    if (!checkStringFormat(gridSizeRegex, gridSizeStr)) {
       println(s"grid size format incorrect ($gridSizeStr)")
       return false
     }
@@ -52,8 +57,8 @@ object InputDataService {
     }
 
     val noOverlappingStartPositions = commandsRawIterator.map { commandsRaw =>
-      val startingPosRegex = "([1-9]+)\\s([1-9]+)".r
-      startingPosRegex.findFirstMatchIn(commandsRaw.head)
+      val startingPosMatcher = startingPosRegex.r
+      startingPosMatcher.findFirstMatchIn(commandsRaw.head)
     }.toSet.count(_.nonEmpty)==commandsRawIterator.size
 
     gridDataValid && roverDataValid && noOverlappingStartPositions
@@ -89,7 +94,7 @@ object InputDataService {
   }
 
   private def checkStartDataFormat(rawStr: String) = {
-    checkStringFormat("([1-9]+)\\s([1-9]+)\\s([A-Z]+)", rawStr)
+    checkStringFormat(startDataRegex, rawStr)
   }
 
   private def checkStringFormat(regex: String, rawString: String) = {
