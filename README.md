@@ -31,8 +31,9 @@ Aside from that, the program follows the following logic:
 Check out the tests for more examples of this
 
 ## Running
-Go to the root directory and type `sbt run`
-(I've asked about creating a docker file for this, but was told it's not needed, so have left it out)
+Go to the root directory and type `sbt run`. to run the tests type `sbt test`.
+
+(I've asked about creating a docker file for this, but was told it's not wanted, so have left it out)
 
 ## Technical Notes
 
