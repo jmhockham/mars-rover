@@ -50,6 +50,7 @@ Even though it wasn't asked for, I've put some simple sanity checking in for the
 ---
 
 Because this is Scala I've tail recurred through the rovers/instructions. However Scala seems to want to pass streams back when using `group` or several other convenience functions, which break the pattern matching. Consequently I've done the following:
+
 Instead of 
 ```Scala
 sequence match {
