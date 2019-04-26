@@ -26,8 +26,9 @@ Aside from that, the program follows the following logic:
 * Rovers will stop moving if they bump into each other.
 * Rovers will stop moving if their commands tell them to go outside the grid.
 * Final positions will be outputted once all the rovers have finished moving.
+* Grid can be between 5 - 100 on an axis
 
 Check out the tests for more examples of this
 
 ## Running
-Go to the base directory and type `sbt run`
+Go to the root directory and type `sbt run`
