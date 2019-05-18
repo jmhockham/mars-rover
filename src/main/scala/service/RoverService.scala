@@ -1,16 +1,15 @@
 package service
 
 import model.Movement.Movement
-import model.{InputData, Instructions, Movement, Rover}
+import model._
 
 import scala.annotation.tailrec
 
 object RoverService {
 
   /**
-    * Processes the instructions from the input data. We keep two lists - rovers that have finished moving, and rovers
-    * that have yet to move. We could do this with one list, but this makes the code easier to read + understand. We
-    * should always be striving to make it easy to read/maintain/update code.
+    * Processes the instructions from the input data. We also send along the other rovers that aren't moving at the
+    * moment, so that our currently moving rover can make sure it doesn't bump into them.
     * @param inputData The case class containing the instructions
     * @return A Seq of rovers that have finished moving.
     */
@@ -23,21 +22,11 @@ object RoverService {
         x.startPosition.direction
       )
     }
-    recurThroughInstructions(inputData.instructions, inputData.gridSizeX, inputData.gridSizeY, roversFinishedMoving = Seq.empty[Rover], roversNotMoved = rovers)
-  }
-
-  @tailrec
-  private def recurThroughInstructions(instructions: Seq[Instructions], maxX: Integer, maxY: Integer,
-                                       roversFinishedMoving: Seq[Rover] = Seq.empty[Rover], roversNotMoved: Seq[Rover] = Seq.empty[Rover]): Seq[Rover] = {
-    instructions match {
-      case Nil =>
-        roversFinishedMoving
-      case stream =>
-        val head = stream.head
-        val tail = stream.tail
-        val remainingUnmovedRovers = roversNotMoved.filterNot(r => head.roverId == r.id)
-        val roverFinished = sendRoverCommands(head, maxX, maxY, roversFinishedMoving, remainingUnmovedRovers)
-        recurThroughInstructions(tail, maxX, maxY, roversFinishedMoving ++ Seq(roverFinished), remainingUnmovedRovers)
+    for(
+      i <- inputData.instructions
+    ) yield {
+      val otherRovers = rovers.filterNot(r => i.roverId==r.id)
+      sendRoverCommands(i, inputData.gridSizeX, inputData.gridSizeY, otherRovers)
     }
   }
 
@@ -46,18 +35,16 @@ object RoverService {
     * @param instructions Instructions for a rover
     * @param maxX Grid maximum x axis value
     * @param maxY Grid mximum y axis value
-    * @param existingRovers The existing rovers that have already moved
-    * @param unmovedRovers Rovers that haven't moved yet
     * @return A rover that has finished moving
     */
-  def sendRoverCommands(instructions: Instructions, maxX: Integer, maxY: Integer, existingRovers: Seq[Rover] = Seq.empty[Rover], unmovedRovers: Seq[Rover] = Seq.empty[Rover]): Rover = {
+  def sendRoverCommands(instructions: Instructions, maxX: Integer, maxY: Integer, otherRovers: Seq[Rover] = Seq.empty[Rover]): Rover = {
     val rover = Rover(
       instructions.roverId,
       instructions.startPosition.startPosX,
       instructions.startPosition.startPosY,
       instructions.startPosition.direction
     )
-    recurThroughMovement(rover, instructions.movements, maxX, maxY, existingRovers ++ unmovedRovers)
+    recurThroughMovement(rover, instructions.movements, maxX, maxY, otherRovers)
   }
 
   @tailrec
