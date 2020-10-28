@@ -19,7 +19,7 @@ object InputData {
     val commandsRaw: Seq[Seq[String]] = strings.tail.grouped(2).toSeq
     val instructions: Seq[Instructions] = commandsRaw.zipWithIndex.map { case (roverInstructionsRaw, index) =>
       Instructions.fromStrings(roverInstructionsRaw,index)
-    }.map(x => x)
+    }
     new InputData(
       gridSizeX = gridLimits.head,
       gridSizeY = gridLimits(1),

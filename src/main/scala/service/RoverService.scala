@@ -22,9 +22,7 @@ object RoverService {
         x.startPosition.direction
       )
     }
-    for(
-      i <- inputData.instructions
-    ) yield {
+    for(i <- inputData.instructions) yield {
       val otherRovers = rovers.filterNot(r => i.roverId==r.id)
       sendRoverCommands(i, inputData.gridSizeX, inputData.gridSizeY, otherRovers)
     }
